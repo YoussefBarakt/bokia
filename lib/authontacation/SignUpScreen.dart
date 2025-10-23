@@ -63,7 +63,7 @@ class SignUpScreen extends StatelessWidget {
             const SizedBox(height: 30),
 
             // Register button
-            const Custombutton(title: 'Register'),
+            Custombutton(title: 'Register'),
 
             const Spacer(),
 

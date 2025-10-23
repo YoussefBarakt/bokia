@@ -5,13 +5,15 @@ class CustomCoreWidgetTextFormField extends StatefulWidget {
   final String hintText;
   final bool isPassword;
   final TextInputType? keyboardType;
+  final TextEditingController? controller;
 
 
   const CustomCoreWidgetTextFormField({
     super.key,
     required this.hintText,
     this.isPassword = false,
-    this.keyboardType
+    this.keyboardType,
+    this.controller
   });
 
   @override
@@ -24,6 +26,7 @@ class _CustomCoreWidgetTextFormFieldState extends State<CustomCoreWidgetTextForm
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: widget.controller,
       keyboardType: widget.keyboardType,
       cursorColor: AppColor.primaryColor,
       obscureText: widget.isPassword && isObscure,

@@ -1,7 +1,9 @@
+import 'package:bokia/%20Repository/auth_cubit_bloc.dart';
 import 'package:bokia/authontacation/login.dart';
 import 'package:bokia/core/thems/AppColor.dart';
 import 'package:bokia/core/thems/customButton.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -32,18 +34,22 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                InkWell(
+                Custombutton(
+                  title: "Login",
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const LoginScreen()),
+                        builder: (context) => BlocProvider(
+                          create: (context) => AuthCubitBloc(),
+                          child: const LoginScreen(),
+                        ),
+                      ),
                     );
                   },
-                  child: const Custombutton(title: "Login"),
                 ),
                 const SizedBox(height: 2),
-                const Custombutton(
+                Custombutton(
                   title: "Register",
                   backgroundColor: Colors.white,
                 ),

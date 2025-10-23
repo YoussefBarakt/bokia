@@ -1,114 +1,175 @@
+import 'package:bokia/%20Repository/auth_cubit_bloc.dart';
 import 'package:bokia/authontacation/SignUpScreen.dart';
 import 'package:bokia/core/CustomCoreWidgetTextFormField.dart';
 import 'package:bokia/core/thems/AppColor.dart';
 import 'package:bokia/core/thems/customButton.dart';
 import 'package:bokia/core/thems/customerAppBar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: CustomerAppBar(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 22),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 29),
-            const Text(
-              "Welcome back! Glad\n to see you, Again!",
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 32),
-            const CustomCoreWidgetTextFormField(hintText: 'Enter your email'),
-            const SizedBox(height: 20),
-            const CustomCoreWidgetTextFormField(
-              hintText: 'Enter your password',
-              isPassword: true,
-            ),
-            const SizedBox(height: 13),
-            const Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                'Forgot Password?',
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
-            const SizedBox(height: 30),
-            const Custombutton(title: "Login"),
-            const SizedBox(height: 35),
-
-            // "Or login with" divider
-            Row(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 22),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Expanded(
-                  child: Divider(endIndent: 30, color: AppColor.borderColor),
+                const SizedBox(height: 29),
+                const Text(
+                  "Welcome back! Glad\n to see you, Again!",
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
-                Text(
-                  "Or login with",
-                  style: TextStyle(
-                    color: AppColor.darkGrayColorForTextPassword,
+                const SizedBox(height: 32),
+
+                // Email field
+                CustomCoreWidgetTextFormField(
+                  controller: emailController,
+                  hintText: 'Enter your email',
+                ),
+                const SizedBox(height: 20),
+
+                // Password field
+                CustomCoreWidgetTextFormField(
+                  controller: passwordController,
+                  hintText: 'Enter your password',
+                  isPassword: true,
+                ),
+                const SizedBox(height: 13),
+
+                // Forgot password
+                const Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    'Forgot Password?',
+                    style: TextStyle(color: Colors.grey),
                   ),
                 ),
-                const Expanded(
-                  child: Divider(indent: 30, color: AppColor.borderColor),
-                ),
-              ],
-            ),
-            const SizedBox(height: 25),
+                const SizedBox(height: 30),
 
-            // Social icons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildSocialIcon("assets/google_ic.svg"),
-                const SizedBox(width: 20),
-                _buildSocialIcon("assets/cib_apple.svg"),
-                const SizedBox(width: 20),
-                _buildSocialIcon("assets/cib_apple.svg"),
-              ],
-            ),
-
-            const Spacer(),
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Don’t have an account? ",
-                    style: TextStyle(color: Colors.black54),
-                  ),
-                  InkWell(
+                // Bloc Listener for login states
+                BlocListener<AuthCubitBloc, AuthCubitState>(
+                  listener: (context, state) {
+                    if (state is LoadingState) {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    } else if (state is Error) {
+                      Navigator.pop(context); // close loading dialog
+                      showDialog(
+                        context: context,
+                        builder: (context) => const AlertDialog(
+                          content: Text("Error, please try again later."),
+                        ),
+                      );
+                    } else if (state is LoadingSuccessState) {
+                      print("error");
+                    }
+                  },
+                  child: Custombutton(
+                    title: "Login",
                     onTap: () {
-
-                       Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpScreen()));
+                      context.read<AuthCubitBloc>().login(
+                        email: emailController.text.trim(),
+                        password: passwordController.text.trim(),
+                      );
                     },
-                    child: const Text(
-                      "Sign Up",
+                  ),
+                ),
+
+                const SizedBox(height: 35),
+
+                // "Or login with" divider
+                Row(
+                  children: [
+                    const Expanded(
+                      child: Divider(endIndent: 30, color: AppColor.borderColor),
+                    ),
+                    Text(
+                      "Or login with",
                       style: TextStyle(
-                        color: AppColor.primaryColor,
-                        fontWeight: FontWeight.bold,
+                        color: AppColor.darkGrayColorForTextPassword,
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
+                    const Expanded(
+                      child: Divider(indent: 30, color: AppColor.borderColor),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 25),
 
-            const SizedBox(height: 25),
-          ],
+                // Social icons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildSocialIcon("assets/google_ic.svg"),
+                    const SizedBox(width: 20),
+                    _buildSocialIcon("assets/cib_apple.svg"),
+                    const SizedBox(width: 20),
+                    _buildSocialIcon("assets/facebook_ic.svg"),
+                  ],
+                ),
+
+                const SizedBox(height: 35),
+
+                // Sign up section
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Don’t have an account? ",
+                        style: TextStyle(color: Colors.black54),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BlocProvider(
+                                create: (context) => AuthCubitBloc(),
+                                child: const SignUpScreen(),
+                              ),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          "Sign Up",
+                          style: TextStyle(
+                            color: AppColor.primaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 25),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
-  // Social Icon Widget
+  // Social icon builder
   Widget _buildSocialIcon(String assetPath) {
     return Container(
       padding: const EdgeInsets.all(15),
