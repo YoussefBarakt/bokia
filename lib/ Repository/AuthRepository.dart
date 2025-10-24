@@ -12,17 +12,21 @@ class AuthRepository {
   );
 
   static login({required String email, required String password}) async {
-      try {
-        final response = await dio.post(
-          "/login",
-          data: {"email": email, "password": password},
-        );
+    try {
+      final response = await dio.post(
+        "/login",
+        data: {"email": email, "password": password},
+      );
 
-        if (response.statusCode == 200) {
-          return response;
-        }
-      } catch (e) {
-        print(e);
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception("Login failed: ${response.statusMessage}");
       }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception("Something went wrong, please try again later.");
     }
+  }
+
 }

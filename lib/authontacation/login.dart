@@ -70,16 +70,19 @@ class LoginScreen extends StatelessWidget {
                           child: CircularProgressIndicator(),
                         ),
                       );
-                    } else if (state is Error) {
-                      Navigator.pop(context); // close loading dialog
+                    } else if (state is LoadingErrorState) {
+                      Navigator.pop(context);
                       showDialog(
                         context: context,
-                        builder: (context) => const AlertDialog(
-                          content: Text("Error, please try again later."),
+                        builder: (context) => AlertDialog(
+                          content: Text(state.message),
                         ),
                       );
                     } else if (state is LoadingSuccessState) {
-                      print("error");
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Login successful ")),
+                      );
                     }
                   },
                   child: Custombutton(
@@ -93,7 +96,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 35),
+              const SizedBox(height: 35),
 
                 // "Or login with" divider
                 Row(
