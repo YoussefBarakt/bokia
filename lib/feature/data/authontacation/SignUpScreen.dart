@@ -1,6 +1,6 @@
-import 'package:bokia/core/CustomCoreWidgetTextFormField.dart';
 import 'package:bokia/core/thems/AppColor.dart';
-import 'package:bokia/core/thems/customButton.dart';
+import 'package:bokia/core/widgets/CustomCoreWidgetTextFormField.dart';
+import 'package:bokia/core/widgets/Custombutton.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatelessWidget {

@@ -1,6 +1,6 @@
 
 
-import 'package:bokia/feature/welcomeScreen/peresentatioon/data/welcome_screen.dart';
+import 'package:bokia/feature/ui/welcomeScreen.dart';
 import 'package:flutter/material.dart';
 
 class Materialbookia extends StatelessWidget {

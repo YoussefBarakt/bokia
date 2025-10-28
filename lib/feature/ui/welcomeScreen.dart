@@ -1,7 +1,9 @@
-import 'package:bokia/%20Repository/auth_cubit_bloc.dart';
-import 'package:bokia/authontacation/login.dart';
+
 import 'package:bokia/core/thems/AppColor.dart';
-import 'package:bokia/core/thems/customButton.dart';
+import 'package:bokia/core/widgets/Custombutton.dart';
+import 'package:bokia/feature/cubit/Repository/auth_cubit_bloc.dart';
+import 'package:bokia/feature/data/authontacation/SignUpScreen.dart';
+import 'package:bokia/feature/data/authontacation/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -52,6 +54,17 @@ class WelcomeScreen extends StatelessWidget {
                 Custombutton(
                   title: "Register",
                   backgroundColor: Colors.white,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BlocProvider(
+                          create: (context) => AuthCubitBloc(),
+                          child:SignUpScreen(),
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(height: 94),
               ],

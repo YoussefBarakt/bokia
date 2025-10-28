@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:bokia/%20Repository/AuthRepository.dart';
+import 'package:bokia/feature/cubit/Repository/AuthRepository.dart';
 import 'package:meta/meta.dart';
 
 part 'auth_cubit_event.dart';
