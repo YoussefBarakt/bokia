@@ -2,10 +2,11 @@
 import 'package:bokia/core/thems/AppColor.dart';
 import 'package:bokia/core/widgets/Custombutton.dart';
 import 'package:bokia/feature/cubit/Repository/auth_cubit_bloc.dart';
-import 'package:bokia/feature/data/authontacation/SignUpScreen.dart';
-import 'package:bokia/feature/data/authontacation/login.dart';
+import 'package:bokia/feature/ui/SignUpScreen.dart';
+import 'package:bokia/feature/ui/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -22,7 +23,7 @@ class WelcomeScreen extends StatelessWidget {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 22),
+            padding:  EdgeInsets.symmetric(horizontal: 22.w),
             child: Column(
               children: [
                 const SizedBox(height: 135),
@@ -30,7 +31,7 @@ class WelcomeScreen extends StatelessWidget {
                 Text(
                   "Order Your Book Now!",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 20.sp,
                     color: AppColor.dartColor,
                     fontWeight: FontWeight.bold,
                   ),
@@ -50,7 +51,7 @@ class WelcomeScreen extends StatelessWidget {
                     );
                   },
                 ),
-                const SizedBox(height: 2),
+                 SizedBox(height:2.h ),
                 Custombutton(
                   title: "Register",
                   backgroundColor: Colors.white,
@@ -66,7 +67,7 @@ class WelcomeScreen extends StatelessWidget {
                     );
                   },
                 ),
-                const SizedBox(height: 94),
+                 SizedBox(height: 94.h),
               ],
             ),
           ),

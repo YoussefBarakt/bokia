@@ -3,7 +3,8 @@ import 'package:bokia/core/widgets/CustomCoreWidgetTextFormField.dart';
 import 'package:bokia/core/widgets/Custombutton.dart';
 import 'package:bokia/core/widgets/CustomerAppBar.dart';
 import 'package:bokia/feature/cubit/Repository/auth_cubit_bloc.dart';
-import 'package:bokia/feature/data/authontacation/SignUpScreen.dart';
+import 'package:bokia/feature/ui/HomeScreen.dart';
+import 'package:bokia/feature/ui/SignUpScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,6 +16,8 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
+
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -28,28 +31,50 @@ class LoginScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 29),
+
+                // 👋 Welcome Text
                 const Text(
                   "Welcome back! Glad\n to see you, Again!",
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
+
                 const SizedBox(height: 32),
 
-                // Email field
+                // 📧 Email
                 CustomCoreWidgetTextFormField(
                   controller: emailController,
                   hintText: 'Enter your email',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Email is required";
+                    } else if (!emailRegex.hasMatch(value)) {
+                      return "Enter a valid email (e.g. example@mail.com)";
+                    }
+                    return null;
+                  },
                 ),
+
                 const SizedBox(height: 20),
 
-                // Password field
+                // 🔒 Password
                 CustomCoreWidgetTextFormField(
                   controller: passwordController,
                   hintText: 'Enter your password',
                   isPassword: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Password is required";
+                    }
+                    return null;
+                  },
                 ),
+
                 const SizedBox(height: 13),
 
-                // Forgot password
+                // 🔑 Forgot Password
                 const Align(
                   alignment: Alignment.centerRight,
                   child: Text(
@@ -57,52 +82,96 @@ class LoginScreen extends StatelessWidget {
                     style: TextStyle(color: Colors.grey),
                   ),
                 ),
+
                 const SizedBox(height: 30),
 
-                // Bloc Listener for login states
+                // 🧠 Bloc Listener (Login States)
                 BlocListener<AuthCubitBloc, AuthCubitState>(
                   listener: (context, state) {
                     if (state is LoadingState) {
                       showDialog(
                         context: context,
                         barrierDismissible: false,
-                        builder: (context) => const Center(
+                        builder: (_) => const Center(
                           child: CircularProgressIndicator(),
                         ),
                       );
                     } else if (state is LoadingErrorState) {
-                      Navigator.pop(context);
+                      if (Navigator.canPop(context)) Navigator.pop(context);
                       showDialog(
                         context: context,
-                        builder: (context) => AlertDialog(
-                          content: Text(state.message),
+                        builder: (_) => AlertDialog(
+                          title: const Text("Login Failed"),
+                          content: Text(state.error),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text("OK"),
+                            ),
+                          ],
                         ),
                       );
                     } else if (state is LoadingSuccessState) {
-                      Navigator.pop(context);
+                      if (Navigator.canPop(context)) Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Login successful ")),
+                        const SnackBar(
+                          content: Text("Login successful"),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const HomeScreen(),
+                        ),
                       );
                     }
                   },
                   child: Custombutton(
                     title: "Login",
                     onTap: () {
+                      final email = emailController.text.trim();
+                      final password = passwordController.text.trim();
+
+                      if (!emailRegex.hasMatch(email)) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content:
+                            Text("Please enter a valid email address."),
+                            backgroundColor: Colors.redAccent,
+                          ),
+                        );
+                        return;
+                      }
+
+                      if (password.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Please enter your password."),
+                            backgroundColor: Colors.redAccent,
+                          ),
+                        );
+                        return;
+                      }
+
                       context.read<AuthCubitBloc>().login(
-                        email: emailController.text.trim(),
-                        password: passwordController.text.trim(),
+                        email: email,
+                        password: password,
                       );
                     },
                   ),
                 ),
 
-              const SizedBox(height: 35),
+                const SizedBox(height: 35),
 
-                // "Or login with" divider
+                // 🔹 Divider with text
                 Row(
                   children: [
                     const Expanded(
-                      child: Divider(endIndent: 30, color: AppColor.borderColor),
+                      child: Divider(
+                        endIndent: 30,
+                        color: AppColor.borderColor,
+                      ),
                     ),
                     Text(
                       "Or login with",
@@ -111,13 +180,17 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                     const Expanded(
-                      child: Divider(indent: 30, color: AppColor.borderColor),
+                      child: Divider(
+                        indent: 30,
+                        color: AppColor.borderColor,
+                      ),
                     ),
                   ],
                 ),
+
                 const SizedBox(height: 25),
 
-                // Social icons
+                // 🌐 Social Login Icons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -131,7 +204,7 @@ class LoginScreen extends StatelessWidget {
 
                 const SizedBox(height: 35),
 
-                // Sign up section
+                // 🧾 Sign Up Section
                 Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -145,8 +218,8 @@ class LoginScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => BlocProvider(
-                                create: (context) => AuthCubitBloc(),
+                              builder: (_) => BlocProvider(
+                                create: (_) => AuthCubitBloc(),
                                 child: const SignUpScreen(),
                               ),
                             ),
@@ -163,6 +236,7 @@ class LoginScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+
                 const SizedBox(height: 25),
               ],
             ),
@@ -172,7 +246,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  // Social icon builder
+  // 🌐 Social Icon Builder
   Widget _buildSocialIcon(String assetPath) {
     return Container(
       padding: const EdgeInsets.all(15),

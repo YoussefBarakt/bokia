@@ -2,12 +2,16 @@
 
 import 'package:bokia/core/thems/AppColor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomCoreWidgetTextFormField extends StatefulWidget {
   final String hintText;
   final bool isPassword;
   final TextInputType? keyboardType;
   final TextEditingController? controller;
+  final  String? Function(
+      String?
+      ) ?validator;
 
 
   const CustomCoreWidgetTextFormField({
@@ -15,7 +19,8 @@ class CustomCoreWidgetTextFormField extends StatefulWidget {
     required this.hintText,
     this.isPassword = false,
     this.keyboardType,
-    this.controller
+    this.controller,
+    this.validator,
   });
 
   @override
@@ -32,6 +37,7 @@ class _CustomCoreWidgetTextFormFieldState extends State<CustomCoreWidgetTextForm
       keyboardType: widget.keyboardType,
       cursorColor: AppColor.primaryColor,
       obscureText: widget.isPassword && isObscure,
+      validator: widget.validator,
       decoration: InputDecoration(
         hintText: widget.hintText,
         suffixIcon: widget.isPassword
@@ -48,7 +54,7 @@ class _CustomCoreWidgetTextFormFieldState extends State<CustomCoreWidgetTextForm
             : null,
         hintStyle: TextStyle(
           color: AppColor.ColorForHintTextField,
-          fontSize: 15,
+          fontSize: 15.sp,
           fontWeight: FontWeight.w400,
         ),
         fillColor: AppColor.lightGrayColor,

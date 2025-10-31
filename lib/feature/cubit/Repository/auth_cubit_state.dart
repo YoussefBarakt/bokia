@@ -8,11 +8,22 @@ final class AuthCubitInitial extends AuthCubitState {}
 final class LoadingState extends AuthCubitState {}
 
 final class LoadingSuccessState extends AuthCubitState {
-  final dynamic data;
-  LoadingSuccessState(this.data);
+  final String token;
+  LoadingSuccessState(this.token);
 }
 
 final class LoadingErrorState extends AuthCubitState {
-  final String message;
-  LoadingErrorState(this.message);
+  final String error;
+  LoadingErrorState(this.error);
 }
+
+final class RegisterLoading extends AuthCubitState {}
+
+final class RegisterSuccess extends AuthCubitState {}
+
+final class RegisterErrorState extends AuthCubitState {
+  final String error;
+  RegisterErrorState(this.error);
+}
+
+final class LogoutSuccess extends AuthCubitState {}

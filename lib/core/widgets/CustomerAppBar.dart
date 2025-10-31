@@ -5,6 +5,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomerAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomerAppBar({super.key});
@@ -25,9 +26,9 @@ class CustomerAppBar extends StatelessWidget implements PreferredSizeWidget {
                 onTap: () {
                   Navigator.pop(context);
                 },
-                child: const Icon(
+                child:  Icon(
                   Icons.arrow_back_ios,
-                  size: 20,
+                  size: 20.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
@@ -35,10 +36,10 @@ class CustomerAppBar extends StatelessWidget implements PreferredSizeWidget {
 
               const SizedBox(width: 1),
 
-              const Text(
+               Text(
                 "Back",
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
@@ -51,5 +52,5 @@ class CustomerAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(56);
+  Size get preferredSize =>  Size.fromHeight(56.h);
 }
